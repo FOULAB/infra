@@ -1,0 +1,21 @@
+[Unit]
+Description=mplayer Groove Salad https://somafm.com/groovesalad/
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=30
+StartLimitBurst=5
+
+[Service]
+User=nobody
+SupplementaryGroups=audio
+ExecStart=/usr/bin/mplayer -quiet http://ice1.somafm.com/groovesalad-128-aac
+Restart=always
+RestartSec=60
+
+PrivateTmp=yes
+NoNewPrivileges=yes
+ProtectSystem=yes
+ProtectHome=yes
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,10 @@
+--- lightdm.conf	2025-02-06 19:26:27.393906221 -0500
++++ lightdm.conf	2025-02-06 19:23:43.000000000 -0500
+@@ -90,6 +90,7 @@
+ # fallback-greeter = Greeter session to launch if fallback-test returns 0
+ #
+ [Seat:*]
++autologin-user=foubot9k
+ #type=local
+ #pam-service=lightdm
+ #pam-autologin-service=lightdm-autologin
