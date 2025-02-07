@@ -2,7 +2,7 @@
 
 ## Foubot2
 
-- `foubot2.service`: copy to `/etc/systemd/system/`
+- service file: refer to foubot2 repo
 
 ## Foubot9000
 
