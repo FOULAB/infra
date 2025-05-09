@@ -1,0 +1,11 @@
+[Unit]
+Description=Duplicity backups - daily
+
+[Timer]
+# TODO: stagger each machine to a different time
+OnCalendar=*-*-02..31 01:00:00
+Persistent=true
+Unit=duplicity-daily.service
+
+[Install]
+WantedBy=default.target
