@@ -1,0 +1,47 @@
+# Nginx config for Foulab backup server.
+#
+# Installed on bahamut.lab.
+
+server {
+    listen 8084 default_server;
+    listen [::]:8084 default_server;
+
+    error_log /var/log/nginx/foulab-backup_error.log error;
+    access_log /var/log/nginx/foulab-backup_access.log combined;
+
+    location ^~ /webdav/ {
+        alias /srv/dev-disk-by-id-wwn-0x6848f690ea02b0002d5d2b875414ebb8-part1/shared/BACKUPS/automated/;
+        dav_ext_methods PROPFIND;
+        dav_methods PUT;
+        dav_access user:rw;
+
+        # same filesystem, to make the final rename efficient
+        # https://github.com/nginx/nginx/blob/d16251969bf113272b577920940f020524d5fceb/src/core/ngx_file.c#L688
+        client_body_temp_path /srv/dev-disk-by-id-wwn-0x6848f690ea02b0002d5d2b875414ebb8-part1/shared/BACKUPS/automated/client_temp;
+
+        # duplicity volumes are 200 MB. sigtar from test.foulab.org is 450 MB.
+        client_max_body_size 800m;
+
+        auth_basic "Foulab Backup";
+        auth_basic_user_file /etc/nginx/foulab-backup-htpasswd;
+
+        # Ensure each machine can only access its own separate directory
+        location ~ /webdav/(?<topdir>([^/]*))/ {
+            # Don't allow GET, block downloading the backup files.
+            if ($request_method !~ "^(PROPFIND|PUT)$") {
+                return 405;
+            }
+
+            #add_header 'x-debug' 'topdir $topdir remote_user $remote_user' always;
+            if ($remote_user = "") {
+                break;  # send 401 Unauthorized
+            }
+            if ($topdir = $remote_user) {
+                break;
+            }
+            return 403;
+        }
+
+        return 403;
+    }
+}
