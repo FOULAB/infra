@@ -26,6 +26,8 @@ sudo systemctl enable \
   /usr/local/etc/systemd/system/duplicity-monthly.service \
   /usr/local/etc/systemd/system/duplicity-monthly.timer
 
+sudo systemctl start duplicity-daily.timer duplicity-monthly.timer
+
 cat <<'EOF' >&2
   create a htpasswd account on bahamut.lab and update /usr/local/etc/duplicity-password
 
