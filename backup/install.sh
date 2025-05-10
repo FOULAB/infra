@@ -16,6 +16,7 @@ sudo snap install duplicity --revision=566 --edge --classic
 
 sudo install -d /usr/local/etc
 sudo install -m 0600 duplicity-password /usr/local/etc
+sudo install -m 0644 duplicity-multi.json /usr/local/etc
 
 sudo install -d /usr/local/etc/systemd/system
 sudo install -m 0644 duplicity-daily.service duplicity-daily.timer duplicity-monthly.service duplicity-monthly.timer /usr/local/etc/systemd/system

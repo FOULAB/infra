@@ -1,0 +1,10 @@
+[
+  {
+    "description": "Foulab backup server",
+    "url": "webdav://example.lab@backup.foulab.org:8084/webdav/example.lab/"
+  },
+  {
+    "description": "eigma mirror",
+    "url": "webdav://example.lab@foulab-backup.nanobit.org:8084/webdav/example.lab/"
+  }
+]
