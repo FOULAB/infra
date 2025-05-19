@@ -18,4 +18,12 @@ EnvironmentFile=/usr/local/etc/duplicity-password
 # Prevent local cache (signatures) from growing indefinitely.
 ExecStart=sh -c 'rm -fr /root/.cache/duplicity/*'
 # TODO: change --encrypt-key to use e-mail once https://gitlab.com/duplicity/duplicity/-/commit/9aacccde9159c883f69e357b69ff642cacfb465d is released
-ExecStart=/snap/duplicity/current//usr/local/duplicity.venv/bin/python3.12 /snap/duplicity/current//usr/local/duplicity.venv/bin/duplicity --metadata-sync-mode partial --gpg-options '--compress-algo none' --encrypt-key A7C543D04D7ABBD0C36581B4862C0107CB0DD84F --exclude /proc --exclude /sys --exclude /tmp/duplicity** full / multi:///usr/local/etc/duplicity-multi.json?mode=mirror
+ExecStart=/snap/duplicity/current//usr/local/duplicity.venv/bin/python3.12 /snap/duplicity/current//usr/local/duplicity.venv/bin/duplicity \
+  --metadata-sync-mode partial \
+  --gpg-options '--compress-algo none' \
+  --encrypt-key A7C543D04D7ABBD0C36581B4862C0107CB0DD84F \
+  --exclude /proc \
+  --exclude /sys \
+  --exclude /tmp/duplicity** \
+  full / \
+  multi:///usr/local/etc/duplicity-multi.json?mode=mirror
