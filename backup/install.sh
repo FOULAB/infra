@@ -1,18 +1,19 @@
 #!/bin/bash
 set -ex
 
-# TODO: switch to gpgsm once https://gitlab.com/duplicity/duplicity/-/commit/8dc698a38a119c12b3160a076959a834cd701e01 is released
-sudo apt install gpg
+sudo apt install gpgsm
 # Private key is on eigma's personal machine at home, password protected.
-sudo gpg --import eigma.gpg
+# gpgsm --export --armor 0x22D4E07B > eigma@foulab.org.pem
+sudo gpgsm --import eigma@foulab.org.pem
 
-# https://serverfault.com/a/1010716/213110
-echo -e "5\ny\n" | sudo gpg --command-fd 0 --edit-key eigma@foulab.org trust
+# https://gnupg-users.gnupg.narkive.com/NuUU1DOL/tutorial-for-gpgsm#post2
+sudo mkdir -p /root/.gnupg
+echo '57:E2:BB:72:5C:99:13:E0:4C:92:FA:C6:34:3B:7A:E0:22:D4:E0:7B' | sudo tee /root/.gnupg/trustlist.txt
 
-# 3.0.5.dev5
+# 3.0.5.dev8
 # TODO: switch to apt package once our needed features are released
 sudo apt install snapd
-sudo snap install duplicity --revision=566 --edge --classic
+sudo snap install duplicity --revision=593 --edge --classic
 
 sudo install -d /usr/local/etc
 sudo install -m 0600 duplicity-password /usr/local/etc
