@@ -1,0 +1,10 @@
+[Unit]
+Description=foulab-deaddrop-stats
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/lib/venv/bin/python3 /usr/local/bin/foulab-deaddrop-stats.py weekly
+User=nobody
+Group=nogroup
+PrivateTmp=no
+SyslogIdentifier=foulab-deaddrop-stats-daily

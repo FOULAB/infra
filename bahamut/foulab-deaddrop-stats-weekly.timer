@@ -1,0 +1,7 @@
+[Timer]
+Unit=foulab-deaddrop-stats-weekly.service
+OnCalendar=Tue *-*-* 17:03:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
