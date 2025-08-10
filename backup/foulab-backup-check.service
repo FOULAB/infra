@@ -1,0 +1,10 @@
+[Unit]
+Description=foulab-backup-check
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/lib/venv/bin/python3 /usr/local/bin/foulab-backup-check.py -d /srv/dev-disk-by-id-wwn-0x6848f690ea02b0002d5d2b875414ebb8-part1/shared/BACKUPS/automated/ -m
+User=nobody
+Group=nogroup
+PrivateTmp=no
+SyslogIdentifier=foulab-backup-check

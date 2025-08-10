@@ -1,0 +1,7 @@
+[Timer]
+Unit=foulab-backup-check.service
+OnCalendar=Mon *-*-* 18:03:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
