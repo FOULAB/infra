@@ -34,7 +34,7 @@ cat <<'EOF' >&2
   create a htpasswd account on bahamut.lab and update /usr/local/etc/duplicity-password
 
   P=$(pwgen 10 1)
-  echo $P | sudo htpasswd -i /etc/nginx/foulab-backups-htpasswd example.lab
+  echo $P | sudo htpasswd -i /etc/nginx/foulab-backup-htpasswd example.lab
   sudo install -d -g www-data -m 2775 /srv/dev-disk-by-id-wwn-0x6848f690ea02b0002d5d2b875414ebb8-part1/shared/BACKUPS/automated/example.lab
   echo "password: $P"
 EOF
