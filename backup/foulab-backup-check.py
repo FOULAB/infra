@@ -76,7 +76,7 @@ def check_wifi(dir_path):
   host = 'wifi.lab'
   text = '- wifi.lab: '
 
-  def _set_str(label, regexp):
+  def _set_str(label, regexp, scale):
     files = [f for f in os.listdir(f'{dir_path}/wifi.lab/') if re.match(regexp, f)]
 
     text = f'{label} '
@@ -89,14 +89,15 @@ def check_wifi(dir_path):
       t = datetime.datetime.strptime(m.group(1), '%Y%m%dT%H%M%SZ')
       size = os.path.getsize(f'{dir_path}/wifi.lab/{last}')
       # TODO: size sanity check
-      text += f'{t.strftime("%b %-d")} ({(now - t).days} days ago, {size / 1024 / 1024:.01f} MB)'
+      bytes = {'KB': 1024, 'MB': 1024 * 1024}[scale]
+      text += f'{t.strftime("%b %-d")} ({(now - t).days} days ago, {size / bytes:.01f} {scale})'
       if t < now - datetime.timedelta(days=7):
         text += f' ❗ Older than 7 days'
     return text
 
-  text += _set_str('MTD Full', re.compile(r'mtd-full.(.*).img.p7m'))
+  text += _set_str('MTD Full', re.compile(r'mtd-full.(.*).img.p7m'), 'MB')
   text += ', '
-  text += _set_str('Sysupgrade Full', re.compile(r'sysupgrade-full.(.*).tar.gz.p7m'))
+  text += _set_str('Sysupgrade Full', re.compile(r'sysupgrade-full.(.*).tar.gz.p7m'), 'KB')
   print_tee(text)
 
 def main():
