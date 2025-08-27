@@ -5,7 +5,8 @@ Intended to be installed on bahamut.lab in /usr/local/bin, and must be run
 in a venv which has package 'mattermostdriver'.
 """
 import argparse, duplicity, os, datetime, email.message
-import subprocess, mattermostdriver
+import re
+import subprocess, mattermostdriver, glob
 
 import gettext
 gettext.install("duplicity", names=["ngettext"])
@@ -49,6 +50,7 @@ def check(dir_path):
       text += '❗ No chain'
     else:
       def _set_str(s):
+        # TODO: fix time zone
         t = datetime.datetime.fromtimestamp(s.get_time())
         info = backend.query_info(s.volume_name_dict.values())
         size = sum(i['size'] for i in info.values())
@@ -65,9 +67,37 @@ def check(dir_path):
           text += f' ❗ Older than 3 days'
     print_tee(text)
 
-  extra = got - set(HOSTS)
+  extra = got - set(HOSTS) - set(['wifi.lab'])
   for host in sorted(extra):
     print_tee(f'Extra host: {host}')
+
+def check_wifi(dir_path):
+  now = datetime.datetime.now()
+  host = 'wifi.lab'
+  text = '- wifi.lab: '
+
+  def _set_str(label, regexp):
+    files = [f for f in os.listdir(f'{dir_path}/wifi.lab/') if re.match(regexp, f)]
+
+    text = f'{label} '
+    if not files:
+      text += '❗ No backup'
+    else:
+      last = max(files)
+      m = re.match(regexp, last)
+      # TODO: fix time zone
+      t = datetime.datetime.strptime(m.group(1), '%Y%m%dT%H%M%SZ')
+      size = os.path.getsize(f'{dir_path}/wifi.lab/{last}')
+      # TODO: size sanity check
+      text += f'{t.strftime("%b %-d")} ({(now - t).days} days ago, {size / 1024 / 1024:.01f} MB)'
+      if t < now - datetime.timedelta(days=7):
+        text += f' ❗ Older than 7 days'
+    return text
+
+  text += _set_str('MTD Full', re.compile(r'mtd-full.(.*).img.p7m'))
+  text += ', '
+  text += _set_str('Sysupgrade Full', re.compile(r'sysupgrade-full.(.*).tar.gz.p7m'))
+  print_tee(text)
 
 def main():
   parser = argparse.ArgumentParser(
@@ -90,6 +120,7 @@ def main():
   duplicity.config.are_errors_fatal = {'list': (False, [])}
 
   check(args.d)
+  check_wifi(args.d)
 
   if args.e:
     m = email.message.EmailMessage()
