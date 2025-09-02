@@ -67,7 +67,7 @@ def check(dir_path):
           text += f' ❗ Older than 3 days'
     print_tee(text)
 
-  extra = got - set(HOSTS) - set(['wifi.lab'])
+  extra = got - set(HOSTS) - set(['wifi.lab', 'cinderblock.lab'])
   for host in sorted(extra):
     print_tee(f'Extra host: {host}')
 
@@ -79,7 +79,7 @@ def check_wifi(dir_path):
   def _set_str(label, regexp, scale):
     files = [f for f in os.listdir(f'{dir_path}/wifi.lab/') if re.match(regexp, f)]
 
-    text = f'{label} '
+    text = f'{label}: '
     if not files:
       text += '❗ No backup'
     else:
@@ -89,7 +89,7 @@ def check_wifi(dir_path):
       t = datetime.datetime.strptime(m.group(1), '%Y%m%dT%H%M%SZ')
       size = os.path.getsize(f'{dir_path}/wifi.lab/{last}')
       # TODO: size sanity check
-      bytes = {'KB': 1024, 'MB': 1024 * 1024}[scale]
+      bytes = {'KB': 1024, 'MB': 1024 * 1024, 'GB': 1024 * 1024 * 1024}[scale]
       text += f'{t.strftime("%b %-d")} ({(now - t).days} days ago, {size / bytes:.01f} {scale})'
       if t < now - datetime.timedelta(days=7):
         text += f' ❗ Older than 7 days'
@@ -98,6 +98,37 @@ def check_wifi(dir_path):
   text += _set_str('MTD Full', re.compile(r'mtd-full.(.*).img.p7m'), 'MB')
   text += ', '
   text += _set_str('Sysupgrade Full', re.compile(r'sysupgrade-full.(.*).tar.gz.p7m'), 'KB')
+  print_tee(text)
+
+def check_cinderblock(dir_path):
+  now = datetime.datetime.now()
+  host = 'cinderblock.lab'
+  text = '- cinderblock.lab: '
+
+  def _set_str(label, regexp, scale):
+    files = [f for f in os.listdir(f'{dir_path}/cinderblock.lab/') if re.match(regexp, f)]
+
+    text = f'{label}: '
+    if not files:
+      text += '❗ No backup'
+    else:
+      last = max(files)
+      m = re.match(regexp, last)
+      # TODO: fix time zone
+      t = datetime.datetime.strptime(m.group(1), '%Y%m%dT%H%M%SZ')
+      size = os.path.getsize(f'{dir_path}/cinderblock.lab/{last}')
+      # TODO: size sanity check
+      bytes = {'KB': 1024, 'MB': 1024 * 1024, 'GB': 1024 * 1024 * 1024}[scale]
+      text += f'{t.strftime("%b %-d")} ({(now - t).days} days ago, {size / bytes:.01f} {scale})'
+      if t < now - datetime.timedelta(days=7):
+        text += f' ❗ Older than 7 days'
+    return text
+
+  text += _set_str('ZFS Full', re.compile(r'zroot-full.(.*).zfs.p7m'), 'GB')
+  text += ', '
+  text += _set_str('ZFS Incremental', re.compile(r'zroot-inc.(.*).zfs.p7m'), 'GB')
+  text += ', '
+  text += _set_str('Conf Full', re.compile(r'conf.(.*).tar.p7m'), 'MB')
   print_tee(text)
 
 def main():
@@ -122,6 +153,7 @@ def main():
 
   check(args.d)
   check_wifi(args.d)
+  check_cinderblock(args.d)
 
   if args.e:
     m = email.message.EmailMessage()
