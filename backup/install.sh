@@ -13,7 +13,7 @@ echo '57:E2:BB:72:5C:99:13:E0:4C:92:FA:C6:34:3B:7A:E0:22:D4:E0:7B' | sudo tee /r
 # 3.0.6.dev7
 # TODO: switch to apt package once our needed features are released
 sudo apt install snapd
-sudo snap install duplicity --revision=669 --edge --classic
+sudo snap install duplicity --revision=676 --edge --classic
 
 sudo install -d /usr/local/etc
 sudo install -m 0600 duplicity-password /usr/local/etc
