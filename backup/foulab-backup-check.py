@@ -18,6 +18,7 @@ import duplicity.log
 import duplicity.path
 
 HOSTS = [
+  'bahamut.lab',
   'foulab.org',
   'manning.lab',
   'test.foulab.org',
