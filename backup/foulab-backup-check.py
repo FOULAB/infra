@@ -36,7 +36,7 @@ def check(dir_path):
   got = set(os.listdir(dir_path))
   got.remove('client_temp')
 
-  now = datetime.datetime.now()
+  now = datetime.datetime.now(datetime.UTC)
 
   for host in HOSTS:
     text = f'- {host}: '
@@ -50,20 +50,19 @@ def check(dir_path):
       text += '❗ No chain'
     else:
       def _set_str(s):
-        # TODO: fix time zone
-        t = datetime.datetime.fromtimestamp(s.get_time())
+        t = datetime.datetime.fromtimestamp(s.get_time(), tz=datetime.UTC)
         info = backend.query_info(s.volume_name_dict.values())
         size = sum(i['size'] for i in info.values())
         # TODO: size sanity check
         return f'{t.strftime("%b %-d")} ({(now - t).days} days ago, {size / 1024 / 1024 / 1024:.01f} GB)'
       fullset = chain.get_first()
       text += f'Full: {_set_str(fullset)}'
-      if datetime.datetime.fromtimestamp(fullset.get_time()) < now - datetime.timedelta(days=37):
+      if datetime.datetime.fromtimestamp(fullset.get_time(), tz=datetime.UTC) < now - datetime.timedelta(days=37):
         text += f' ❗ Older than 37 days'
       lastset = chain.get_last()
       if lastset is not fullset:
         text += f', Incremental: {_set_str(lastset)}'
-        if datetime.datetime.fromtimestamp(lastset.get_time()) < now - datetime.timedelta(days=3):
+        if datetime.datetime.fromtimestamp(lastset.get_time(), tz=datetime.UTC) < now - datetime.timedelta(days=3):
           text += f' ❗ Older than 3 days'
     print_tee(text)
 
@@ -72,7 +71,7 @@ def check(dir_path):
     print_tee(f'Extra host: {host}')
 
 def check_wifi(dir_path):
-  now = datetime.datetime.now()
+  now = datetime.datetime.now(datetime.UTC)
   host = 'wifi.lab'
   text = '- wifi.lab: '
 
@@ -85,8 +84,7 @@ def check_wifi(dir_path):
     else:
       last = max(files)
       m = re.match(regexp, last)
-      # TODO: fix time zone
-      t = datetime.datetime.strptime(m.group(1), '%Y%m%dT%H%M%SZ')
+      t = datetime.datetime.strptime(m.group(1), '%Y%m%dT%H%M%SZ').replace(tzinfo=datetime.UTC)
       size = os.path.getsize(f'{dir_path}/wifi.lab/{last}')
       # TODO: size sanity check
       bytes = {'KB': 1024, 'MB': 1024 * 1024, 'GB': 1024 * 1024 * 1024}[scale]
@@ -101,7 +99,7 @@ def check_wifi(dir_path):
   print_tee(text)
 
 def check_cinderblock(dir_path):
-  now = datetime.datetime.now()
+  now = datetime.datetime.now(datetime.UTC)
   host = 'cinderblock.lab'
   text = '- cinderblock.lab: '
 
@@ -114,8 +112,7 @@ def check_cinderblock(dir_path):
     else:
       last = max(files)
       m = re.match(regexp, last)
-      # TODO: fix time zone
-      t = datetime.datetime.strptime(m.group(1), '%Y%m%dT%H%M%SZ')
+      t = datetime.datetime.strptime(m.group(1), '%Y%m%dT%H%M%SZ').replace(tzinfo=datetime.UTC)
       size = os.path.getsize(f'{dir_path}/cinderblock.lab/{last}')
       # TODO: size sanity check
       bytes = {'KB': 1024, 'MB': 1024 * 1024, 'GB': 1024 * 1024 * 1024}[scale]
