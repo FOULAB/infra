@@ -84,7 +84,7 @@ def check_wifi(dir_path):
     else:
       last = max(files)
       m = re.match(regexp, last)
-      t = datetime.datetime.strptime(m.group(1), '%Y%m%dT%H%M%SZ').replace(tzinfo=datetime.UTC)
+      t = datetime.datetime.fromisoformat(m.group(1))
       size = os.path.getsize(f'{dir_path}/wifi.lab/{last}')
       # TODO: size sanity check
       bytes = {'KB': 1024, 'MB': 1024 * 1024, 'GB': 1024 * 1024 * 1024}[scale]
@@ -112,7 +112,7 @@ def check_cinderblock(dir_path):
     else:
       last = max(files)
       m = re.match(regexp, last)
-      t = datetime.datetime.strptime(m.group(1), '%Y%m%dT%H%M%SZ').replace(tzinfo=datetime.UTC)
+      t = datetime.datetime.fromisoformat(m.group(1))
       size = os.path.getsize(f'{dir_path}/cinderblock.lab/{last}')
       # TODO: size sanity check
       bytes = {'KB': 1024, 'MB': 1024 * 1024, 'GB': 1024 * 1024 * 1024}[scale]
