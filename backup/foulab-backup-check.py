@@ -128,7 +128,7 @@ def check_cinderblock(dir_path):
   text += ', '
   text += _set_str('ZFS Incremental', re.compile(r'zroot-inc.(.*).zfs.p7m'), 'GB')
   text += ', '
-  text += _set_str('Conf Full', re.compile(r'conf.(.*).tar.p7m'), 'MB')
+  text += _set_str('Conf Full', re.compile(r'conf-full.(.*).tar.p7m'), 'MB')
   print_tee(text)
 
 def main():
