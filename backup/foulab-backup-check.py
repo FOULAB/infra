@@ -106,7 +106,7 @@ def check_cinderblock(dir_path):
   host = 'cinderblock.lab'
   text = '- cinderblock.lab: '
 
-  def _set_str(label, regexp, scale):
+  def _set_str(label, regexp, scale, max_age):
     files = [f for f in os.listdir(f'{dir_path}/cinderblock.lab/') if re.match(regexp, f)]
 
     text = f'{label}: '
@@ -120,15 +120,15 @@ def check_cinderblock(dir_path):
       # TODO: size sanity check
       bytes = {'KB': 1024, 'MB': 1024 * 1024, 'GB': 1024 * 1024 * 1024}[scale]
       text += f'{t.strftime("%b %-d")} ({(now - t).days} days ago, {size / bytes:.01f} {scale})'
-      if t < now - datetime.timedelta(days=7):
+      if t < now - max_age:
         text += f' ❗ Older than 7 days'
     return text
 
-  text += _set_str('ZFS Full', re.compile(r'zroot-full.(.*).zfs.p7m'), 'GB')
+  text += _set_str('ZFS Full', re.compile(r'zroot-full.(.*).zfs.p7m'), 'GB', max_age=datetime.timedelta(days=37))
   text += ', '
-  text += _set_str('ZFS Incremental', re.compile(r'zroot-inc.(.*).zfs.p7m'), 'GB')
+  text += _set_str('ZFS Incremental', re.compile(r'zroot-inc.(.*).zfs.p7m'), 'GB', max_age=datetime.timedelta(days=7))
   text += ', '
-  text += _set_str('Conf Full', re.compile(r'conf-full.(.*).tar.p7m'), 'MB')
+  text += _set_str('Conf Full', re.compile(r'conf-full.(.*).tar.p7m'), 'MB', max_age=datetime.timedelta(days=7))
   print_tee(text)
 
 def main():
