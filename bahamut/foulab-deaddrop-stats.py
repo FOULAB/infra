@@ -20,7 +20,10 @@ with os.scandir('/srv/dev-disk-by-id-wwn-0x6848f690ea02b0002d5d2b875414ebb8-part
       prev_count = state.get(top.name, 0)
 
       treei = os.walk(top)
-      file_count = sum(len(filenames) for _, _, filenames in treei)
+      file_count = sum(len(filenames) for dirname, _, filenames in treei if
+        # Ignore this, has high churn every day.
+        '/BACKUPS/automated' not in dirname
+      )
 
       # testing
       # if top.name == 'TEMP': file_count = prev_count + 1
