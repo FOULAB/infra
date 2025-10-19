@@ -10,7 +10,8 @@ sudo gpgsm --import eigma@foulab.org.pem
 sudo mkdir -p /root/.gnupg
 echo '57:E2:BB:72:5C:99:13:E0:4C:92:FA:C6:34:3B:7A:E0:22:D4:E0:7B' | sudo tee /root/.gnupg/trustlist.txt
 
-# 3.0.6.dev7
+# 3.0.6.dev11
+# TODO: switch to pip so we can pin versions (https://gitlab.com/duplicity/duplicity/-/merge_requests/320#note_2819650113)
 # TODO: switch to apt package once our needed features are released
 sudo apt install snapd
 sudo snap install duplicity --edge --classic
