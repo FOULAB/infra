@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import mattermostdriver, os, json, tempfile, random, sys
 
+# TODO: clean up 'daily'
 track = sys.argv[1]
 
 try:
