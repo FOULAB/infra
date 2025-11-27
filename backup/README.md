@@ -7,8 +7,8 @@ Foulab has a large number of servers and devices which provide essential service
 - [Requirements](#requirements)
 - [Overview](#overview)
 - [Snowflakes](#snowflakes)
-- [cinderblock.lab](#cinderblocklab)
-- [wifi.lab](#wifilab)
+  - [cinderblock.lab](#cinderblocklab)
+  - [wifi.lab](#wifilab)
 - [Installation](#installation)
 - [Monitoring](#monitoring)
 
