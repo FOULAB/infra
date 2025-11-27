@@ -2,6 +2,17 @@
 
 Foulab has a large number of servers and devices which provide essential services to the organization: the website, Mattermost server, door unlocking, wifi network, etc. This describes the backup infrastructure used for all these servers and devices ("clients").
 
+- [Objective](#objective)
+- [Types of Machines](#types-of-machines)
+- [Requirements](#requirements)
+- [Overview](#overview)
+- [Snowflakes](#snowflakes)
+- [cinderblock.lab](#cinderblocklab)
+- [wifi.lab](#wifilab)
+- [Installation](#installation)
+- [Monitoring](#monitoring)
+
+
 ## Objective
 
 The main goal of the backup system is to prevent (permanent) data loss and minimize time to recovery in the following cases:
@@ -148,7 +159,7 @@ Install steps are codified in [install.sh](install.sh).
 
 **Read the script in full before running it. Do not expect the script to work perfectly. It is more "best effort" and it is very likely to break and require small manual fixes.**
 
-# Monitoring
+## Monitoring
 
 Once a week, the backup servers run a check script to make sure:
 
